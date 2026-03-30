@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elias Reavan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Raleway:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #080808;
+      --deep: #0e0c0f;
+      --surface: #141118;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --silver: #a0a0b0;
+      --white: #f0ede8;
+      --accent: #7a3f5e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.2s ease;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.5;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 40px; align-items: center; }
+    .nav-links a {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .lang-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 6px 14px;
+      cursor: none;
+      transition: all 0.3s;
+    }
+    .lang-btn:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+
+    /* HERO */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 60%, rgba(122,63,94,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 80%, rgba(201,168,76,0.05) 0%, transparent 60%),
+        linear-gradient(160deg, #0a0810 0%, #080608 50%, #0c090d 100%);
+    }
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 1.2s 0.5s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: var(--silver);
+      margin-top: 28px;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+    .hero-divider {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      margin: 50px auto 0;
+      opacity: 0;
+      animation: fadeIn 1s 1.4s forwards;
+    }
+    .scroll-hint {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--silver);
+      text-transform: uppercase;
+      margin-top: 16px;
+      opacity: 0;
+      animation: fadeIn 1s 1.6s forwards;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 120px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 60px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(201,168,76,0.4), transparent);
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 40px;
+    }
+    .section-title em { font-style: italic; color: var(--gold-light); }
+
+    /* ABOUT */
+    #about { padding-top: 60px; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--silver);
+      margin-bottom: 20px;
+    }
+    .about-text p strong { color: var(--white); font-weight: 400; }
+    .about-portrait {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .about-portrait::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(122,63,94,0.1));
+    }
+    .portrait-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: rgba(201,168,76,0.3);
+      text-align: center;
+      padding: 40px;
+      line-height: 1.8;
+    }
+    .about-portrait::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(201,168,76,0.2);
+      pointer-events: none;
+    }
+    .portrait-corner {
+      position: absolute;
+      width: 30px; height: 30px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .portrait-corner.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+    .portrait-corner.tr { top: 12px; right: 12px; border-width: 1px 1px 0 0; }
+    .portrait-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 1px 1px; }
+    .portrait-corner.br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+    /* MUSIC */
+    #music { background: var(--deep); padding: 120px 0; max-width: none; }
+    #music > .inner { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+    .music-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+    }
+    .track-card {
+      position: relative;
+      background: var(--surface);
+      padding: 40px 36px;
+      overflow: hidden;
+      transition: transform 0.4s ease;
+    }
+    .track-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .track-card:hover::before { transform: scaleX(1); }
+    .track-card:hover { transform: translateY(-4px); }
+    .track-number {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: rgba(201,168,76,0.4);
+      margin-bottom: 24px;
+    }
+    .track-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .track-genre {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--silver);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .track-desc {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: rgba(160,160,176,0.7);
+    }
+    .music-cta {
+      margin-top: 60px;
+      display: flex;
+      gap: 20px;
+    }
+
+    /* BOOK */
+    #book { padding: 120px 60px; max-width: 1200px; margin: 0 auto; }
+    .book-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .book-cover {
+      position: relative;
+      aspect-ratio: 2/3;
+      background: linear-gradient(160deg, #1a0e1a, #0d0a10);
+      border: 1px solid rgba(201,168,76,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(201,168,76,0.08), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(122,63,94,0.12), transparent 60%);
+    }
+    .book-cover-inner {
+      position: relative;
+      text-align: center;
+      padding: 40px;
+    }
+    .book-cover-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-style: italic;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: var(--gold-light);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .book-cover-author {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--silver);
+    }
+    .book-ornament {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 20px auto;
+      opacity: 0.4;
+    }
+    .book-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .book-info p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--silver);
+      margin-bottom: 20px;
+    }
+    .book-quote {
+      border-left: 1px solid var(--gold);
+      padding-left: 28px;
+      margin: 40px 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      color: var(--white);
+    }
+    .book-meta {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+    }
+    .book-meta-item {
+      text-align: center;
+    }
+    .book-meta-item .num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      display: block;
+    }
+    .book-meta-item .label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--silver);
+      text-transform: uppercase;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 32px;
+      transition: all 0.3s;
+      cursor: none;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+    }
+    .btn-outline {
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--gold);
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.07);
+    }
+
+    /* CONTACT */
+    #contact {
+      background: var(--deep);
+      padding: 120px 0;
+      max-width: none;
+      text-align: center;
+    }
+    #contact > .inner {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    #contact .section-title { margin-bottom: 20px; }
+    #contact p {
+      color: var(--silver);
+      margin-bottom: 50px;
+      line-height: 1.8;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .social-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--silver);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .social-links a:hover { color: var(--gold); }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    footer p {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: rgba(160,160,176,0.4);
+    }
+    footer .footer-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: rgba(201,168,76,0.4);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      #music > .inner, #contact > .inner { padding: 0 24px; }
+      footer { padding: 30px 24px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-portrait { display: none; }
+      .music-grid { grid-template-columns: 1fr; }
+      .book-layout { grid-template-columns: 1fr; }
+      .book-cover { aspect-ratio: auto; min-height: 300px; }
+      .hero-title { font-size: 3.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">Elias Reavan</a>
+    <div class="nav-links">
+      <a href="#about" data-nl="Over" data-en="About">Over</a>
+      <a href="#music" data-nl="Muziek" data-en="Music">Muziek</a>
+      <a href="#book" data-nl="Boek" data-en="Book">Boek</a>
+      <a href="#contact" data-nl="Contact" data-en="Contact">Contact</a>
+      <button class="lang-btn" id="langToggle">EN</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow" data-nl="Muzikant &nbsp;·&nbsp; Auteur &nbsp;·&nbsp; Verhalenverteller" data-en="Musician &nbsp;·&nbsp; Author &nbsp;·&nbsp; Storyteller">Muzikant &nbsp;·&nbsp; Auteur &nbsp;·&nbsp; Verhalenverteller</p>
+      <h1 class="hero-title">Elias<br/><em>Reavan</em></h1>
+      <p class="hero-sub" data-nl="Waar muziek en duisternis elkaar ontmoeten" data-en="Where music and darkness converge">Waar muziek en duisternis elkaar ontmoeten</p>
+      <div class="hero-divider"></div>
+      <p class="scroll-hint" data-nl="Ontdek" data-en="Discover">Ontdek</p>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <div class="section-label" data-nl="Over Elias" data-en="About Elias">Over Elias</div>
+        <h2 class="section-title" data-nl="Een stem uit de<br/><em>schemerzone</em>" data-en="A voice from the<br/><em>threshold</em>">Een stem uit de<br/><em>schemerzone</em></h2>
+        <p data-nl="<strong>Elias Reavan</strong> is het creatieve alter ego van een Belgische kunstenaar die muziek en literatuur gebruikt als portalen naar diepere lagen van de menselijke ervaring." data-en="<strong>Elias Reavan</strong> is the creative alter ego of a Belgian artist who uses music and literature as portals into deeper layers of human experience."><strong>Elias Reavan</strong> is het creatieve alter ego van een Belgische kunstenaar die muziek en literatuur gebruikt als portalen naar diepere lagen van de menselijke ervaring.</p>
+        <p data-nl="Met theatrale pop-anthems, eurodance en gothic pop verkent Elias de grenzen van identiteit, verlies en transformatie. Zijn debuutroman <em>De Ether</em> volgt dezelfde weg — een psychologische reis door het onbekende." data-en="Through theatrical pop anthems, eurodance, and gothic pop, Elias explores the edges of identity, loss, and transformation. His debut novel <em>De Ether</em> walks the same path — a psychological journey through the unknown.">Met theatrale pop-anthems, eurodance en gothic pop verkent Elias de grenzen van identiteit, verlies en transformatie. Zijn debuutroman <em>De Ether</em> volgt dezelfde weg — een psychologische reis door het onbekende.</p>
+      </div>
+      <div class="about-portrait">
+        <div class="portrait-corner tl"></div>
+        <div class="portrait-corner tr"></div>
+        <div class="portrait-corner bl"></div>
+        <div class="portrait-corner br"></div>
+        <img src="Elias Reavan.jpg" alt="Elias Reavan" style="width:100%;height:100%;object-fit:cover;display:block;" />
+      </div>
+    </div>
+  </section>
+
+  <!-- MUSIC -->
+  <section id="music">
+    <div class="inner">
+      <div class="section-label reveal" data-nl="Discografie" data-en="Discography">Discografie</div>
+      <h2 class="section-title reveal" data-nl="De <em>muziek</em>" data-en="The <em>music</em>">De <em>muziek</em></h2>
+      <div class="music-grid">
+        <div class="track-card reveal">
+          <div class="track-number">01</div>
+          <div class="track-name" data-nl="Theatrale Anthems" data-en="Theatrical Anthems">Theatrale Anthems</div>
+          <div class="track-genre">Gothic Pop · Dark Pop</div>
+          <p class="track-desc" data-nl="Dramatische composities die het theater van de ziel verkennen — met koor, strijkers en een stem die brandt." data-en="Dramatic compositions exploring the theater of the soul — choir, strings, and a voice that burns.">Dramatische composities die het theater van de ziel verkennen — met koor, strijkers en een stem die brandt.</p>
+        </div>
+        <div class="track-card reveal">
+          <div class="track-number">02</div>
+          <div class="track-name">Eurodance</div>
+          <div class="track-genre">Electronic · Motivational</div>
+          <p class="track-desc" data-nl="Opzwepende beats die kracht en beweging belichamen — voor wie klaar is om op te staan." data-en="Driving beats embodying strength and momentum — for those ready to rise.">Opzwepende beats die kracht en beweging belichamen — voor wie klaar is om op te staan.</p>
+        </div>
+        <div class="track-card reveal">
+          <div class="track-number">03</div>
+          <div class="track-name" data-nl="Motivationele Pop" data-en="Motivational Pop">Motivationele Pop</div>
+          <div class="track-genre">Pop · Uplifting</div>
+          <p class="track-desc" data-nl="Lichte melancholie ontmoet hoop. Nummers over hergeboorte, zelfliefde en nieuwe beginnen." data-en="Light melancholy meets hope. Songs about rebirth, self-love, and new beginnings.">Lichte melancholie ontmoet hoop. Nummers over hergeboorte, zelfliefde en nieuwe beginnen.</p>
+        </div>
+      </div>
+      <div class="music-cta reveal">
+        <a href="https://open.spotify.com/artist/5YsvolimnvIvhd2mOnFK7T?si=lUqRv1obQXy1AfMbQIeWxQ" class="btn btn-primary" target="_blank" data-nl="Beluister op Spotify" data-en="Listen on Spotify">Beluister op Spotify</a>
+        <a href="https://distrokid.com" class="btn btn-outline" target="_blank" data-nl="Alle platforms" data-en="All platforms">Alle platforms</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section id="book">
+    <div class="book-layout">
+      <div class="book-cover reveal">
+        <img src="ChatGPT Image 30 mrt 2026, 12_01_41.png" alt="De Ether - Elias Reavan" style="width:100%;height:100%;object-fit:cover;display:block;" />
+      </div>
+      <div class="book-info reveal">
+        <div class="section-label" data-nl="Debuutroman" data-en="Debut Novel">Debuutroman</div>
+        <h2 class="section-title" data-nl="<em>De Ether</em><br/>Boek I" data-en="<em>De Ether</em><br/>Book I"><em>De Ether</em><br/>Boek I</h2>
+        <p data-nl="Een psychologische horror- en sci-fi roman die de lezer meevoert naar de rand van het bewustzijn. Wanneer de grenzen tussen werkelijkheid en verbeelding vervagen, blijft slechts één vraag over." data-en="A psychological horror and sci-fi novel that pulls the reader to the edge of consciousness. When the boundaries between reality and imagination dissolve, only one question remains.">Een psychologische horror- en sci-fi roman die de lezer meevoert naar de rand van het bewustzijn. Wanneer de grenzen tussen werkelijkheid en verbeelding vervagen, blijft slechts één vraag over.</p>
+        <div class="book-quote" data-nl="Wat als de stilte niet leeg is,<br/>maar vol met iets dat wacht?" data-en="What if the silence isn't empty,<br/>but full of something waiting?">Wat als de stilte niet leeg is,<br/>maar vol met iets dat wacht?</div>
+        <div class="book-meta">
+          <div class="book-meta-item">
+            <span class="num">14</span>
+            <span class="label" data-nl="Hoofdstukken" data-en="Chapters">Hoofdstukken</span>
+          </div>
+          <div class="book-meta-item">
+            <span class="num">I</span>
+            <span class="label" data-nl="Deel" data-en="Volume">Deel</span>
+          </div>
+          <div class="book-meta-item">
+            <span class="num">NL</span>
+            <span class="label" data-nl="Taal" data-en="Language">Taal</span>
+          </div>
+        </div>
+        <div style="margin-top:40px;">
+          <a href="#contact" class="btn btn-primary" data-nl="Blijf op de hoogte" data-en="Stay informed">Blijf op de hoogte</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="inner">
+      <div class="section-label reveal" style="justify-content:center; text-align:center" data-nl="Verbinding" data-en="Connect">Verbinding</div>
+      <h2 class="section-title reveal" data-nl="Blijf in de<br/><em>schaduw volgen</em>" data-en="Stay in the<br/><em>shadow">Blijf in de<br/><em>schaduw volgen</em></h2>
+      <p class="reveal" data-nl="Voor samenwerkingen, persberichten of gewoon om verbinding te maken — stuur een bericht." data-en="For collaborations, press inquiries, or simply to connect — send a message.">Voor samenwerkingen, persberichten of gewoon om verbinding te maken — stuur een bericht.</p>
+      <form action="https://formspree.io/f/xnjodpqn" method="POST" class="reveal" style="display:flex;flex-direction:column;gap:16px;max-width:480px;margin:0 auto;">
+        <input type="email" name="email" placeholder="Jouw e-mailadres" required style="background:var(--surface);border:1px solid rgba(201,168,76,0.2);color:var(--white);padding:14px 20px;font-family:'Raleway',sans-serif;font-size:0.85rem;letter-spacing:0.05em;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderColor='rgba(201,168,76,0.6)'" onblur="this.style.borderColor='rgba(201,168,76,0.2)'" />
+        <textarea name="message" placeholder="Jouw bericht" required rows="4" style="background:var(--surface);border:1px solid rgba(201,168,76,0.2);color:var(--white);padding:14px 20px;font-family:'Raleway',sans-serif;font-size:0.85rem;letter-spacing:0.05em;outline:none;resize:none;transition:border-color 0.3s;" onfocus="this.style.borderColor='rgba(201,168,76,0.6)'" onblur="this.style.borderColor='rgba(201,168,76,0.2)'"></textarea>
+        <button type="submit" class="btn btn-primary" style="cursor:pointer;" data-nl="Stuur een bericht" data-en="Send a message">Stuur een bericht</button>
+      </form>
+      <div class="social-links reveal">
+        <a href="https://www.instagram.com/eliasreavan?igsh=MTYwZGR5MDIwM2x3Yw==" target="_blank">Instagram</a>
+        <a href="https://tiktok.com/@eliasreavan" target="_blank">TikTok</a>
+        <a href="https://substack.com" target="_blank">Substack</a>
+        <a href="https://linktr.ee" target="_blank">Linktree</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">Elias Reavan</span>
+    <p data-nl="© 2026 · Alle rechten voorbehouden" data-en="© 2026 · All rights reserved">© 2026 · Alle rechten voorbehouden</p>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animateCursor() {
+      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+      rx += (mx - rx) * 0.12; ry += (my - ry) *.12;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Language toggle
+    let lang = 'nl';
+    const langBtn = document.getElementById('langToggle');
+    function updateLang() {
+      document.querySelectorAll('[data-nl]').forEach(el => {
+        const val = el.getAttribute('data-' + lang);
+        if (val) el.innerHTML = val;
+      });
+      langBtn.textContent = lang === 'nl' ? 'EN' : 'N
