@@ -3,246 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Elias Reavan | De Ether</title>
+<title>Elias Reavan</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Arial', sans-serif; background: #0f0f0f; color: #fff; overflow-x: hidden; }
-
-  header { text-align: center; padding: 2rem 1rem; background: linear-gradient(90deg, #ff4e50, #f9d423); color: #fff; }
-  header h1 { font-size: 2rem; letter-spacing: 2px; }
-
-  section { max-width: 1200px; margin: 3rem auto; padding: 0 1rem; }
-
-  h2 { font-size: 1.8rem; margin-bottom: 1rem; border-bottom: 2px solid #f9d423; display: inline-block; padding-bottom: 0.3rem; }
-
-  .book, .about {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    align-items: center;
-    justify-content: center;
-  }
-  .book img, .about img { 
-    max-width: 300px; 
-    border-radius: 12px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-    transform: translateY(50px);
-    opacity: 0;
-    animation: fadeUp 1s forwards;
-    transition: transform 0.6s ease, box-shadow 0.6s ease, filter 0.6s ease;
-  }
-  .book img:hover, .about img:hover {
-    transform: translateY(-10px) rotate(-1deg) scale(1.05);
-    box-shadow: 0 20px 40px rgba(255, 212, 35, 0.7);
-    filter: brightness(1.2) saturate(1.2);
-  }
-
-  .book-text, .about-text {
-    max-width: 600px;
-    line-height: 1.6;
-    font-size: 1rem;
-    color: #ddd;
-    transform: translateY(50px);
-    opacity: 0;
-    animation: fadeUp 1s forwards;
-    animation-delay: 0.3s;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-  }
-  .book-text:hover, .about-text:hover {
-    transform: translateY(-5px);
-    opacity: 1;
-  }
-
-  @keyframes fadeUp {
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .instagram-feed {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 2rem;
-  }
-  .instagram-feed iframe {
-    width: 100%;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-    cursor: pointer;
-    transform: translateX(100%);
-    opacity: 0;
-    animation: slideIn 0.8s forwards;
-  }
-  .instagram-feed iframe:nth-child(1) { animation-delay: 0.1s; }
-  .instagram-feed iframe:nth-child(2) { animation-delay: 0.2s; }
-  .instagram-feed iframe:nth-child(3) { animation-delay: 0.3s; }
-  .instagram-feed iframe:nth-child(4) { animation-delay: 0.4s; }
-  .instagram-feed iframe:nth-child(5) { animation-delay: 0.5s; }
-
-  @keyframes slideIn {
-    to { transform: translateX(0); opacity: 1; }
-  }
-
-  .instagram-feed iframe:hover {
-    transform: scale(1.03);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  }
-
-  .modal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-    z-index: 9999;
-    flex-direction: column;
-  }
-  .modal.active { opacity: 1; pointer-events: auto; }
-
-  .modal iframe {
-    width: 90%;
-    max-width: 900px;
-    height: 80%;
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-    transition: transform 0.5s ease, opacity 0.5s ease;
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  .modal.active iframe { transform: scale(1); opacity: 1; }
-
-  .modal-close {
-    position: fixed;
-    top: 20px; right: 30px;
-    font-size: 2rem;
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-    z-index: 10000;
-    transition: color 0.2s ease;
-  }
-  .modal-close:hover { color: #f9d423; }
-
-  .modal-nav {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 3rem;
-    color: #fff;
-    cursor: pointer;
-    user-select: none;
-    z-index: 10000;
-    transition: color 0.2s ease;
-  }
-  .modal-nav:hover { color: #f9d423; }
-  .modal-prev { left: 20px; }
-  .modal-next { right: 20px; }
-
-  footer {
-    text-align: center;
-    padding: 2rem 1rem;
-    color: #aaa;
-    font-size: 0.9rem;
-    margin-top: 3rem;
-  }
+  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #121212; color: #f5f5f5; }
+  header, section { padding: 40px 20px; max-width: 1200px; margin: auto; }
+  h1, h2 { color: #FFD700; }
+  .boek-cover, .over-portrait { max-width: 300px; display: block; margin-bottom: 20px; border-radius: 8px; }
+  .section-content { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+  .section-text { flex: 1; min-width: 250px; }
+  .instagram-feed { margin-top: 20px; }
+  iframe.lightwidget-widget { width: 100%; border: 0; overflow: hidden; border-radius: 8px; }
+  .media-player { width: 100%; margin-top: 20px; }
+  .button { background: #FFD700; color: #121212; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+  .button:hover { background: #ffb700; }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Volg Elias Reavan op Instagram & ontdek De Ether</h1>
-</header>
-
 <!-- Boek Sectie -->
 <section id="boek">
-  <h2>Het Boek: De Ether</h2>
-  <div class="book">
-    <img src="BoekCover.png" alt="De Ether - Boekcover">
-    <div class="book-text">
-      <p><strong>De Ether</strong> is een meeslepende psychologische thriller met sci-fi en lichte horror-elementen. Journalist Elias Van den Eynde reist door Londen, op zoek naar een verdwenen professor die iets geheimzinnigs met de Ether te maken heeft. Het verhaal weeft meerdere personages en werelden samen, en onthult subtiel een groter kosmisch mysterie. Perfect voor liefhebbers van intrigerende verhalen vol spanning, mysterie en onverwachte wendingen.</p>
+  <h1>De Ether</h1>
+  <div class="section-content">
+    <img src="BoekCover.png" alt="De Ether Cover" class="boek-cover">
+    <div class="section-text">
+      <p><strong>Samenvatting:</strong> In *De Ether* volgt journalist Elias Van den Eynde een mysterieus spoor van een verdwenen professor dat hem diep in de verborgen lagen van Londen leidt. Een verhaal vol intriges, psychologische spanning, sci-fi-elementen en subtiele horror, waar energieën, geheimen en verbondenheid elkaar kruisen. Bereid je voor op een reis door het onbekende, waar niets is wat het lijkt en alles met elkaar verbonden is.</p>
+      <button class="button">Lees meer</button>
     </div>
   </div>
 </section>
 
-<!-- Over Elias Sectie -->
+<!-- Over Elias -->
 <section id="over-elias">
-  <h2>Over Elias Reavan</h2>
-  <div class="about">
-    <img src="EliasReavan.jpg" alt="Elias Reavan">
-    <div class="about-text">
-      <p>Elias Reavan is een creatieve geest, schrijver en denker, gefascineerd door het mysterie van menselijke bewustzijn en verborgen energetische dimensies. Zijn werk combineert psychologische spanning, sci-fi en lichte horror, met een diepgaande interesse in spiritualiteit en esoterie. Door zijn unieke stijl weet hij verhalen te creëren die intrigerend, meeslepend en emotioneel resonant zijn. Elias inspireert lezers om de grenzen van perceptie en realiteit te verkennen, terwijl hij hen meeneemt op een reis door menselijkheid, mysterie en het onbekende.</p>
+  <h2>Over Elias</h2>
+  <div class="section-content">
+    <img src="EliasReavan.jpg" alt="Elias Reavan" class="over-portrait">
+    <div class="section-text">
+      <p>Elias Reavan is een creatieve ziel, schrijver en muzikant, geboren in België. Met een nieuwsgierige geest en een passie voor het onzichtbare, combineert hij mysterie, psychologische diepgang en sciencefiction in zijn verhalen. Hij is een visionair denker die zijn publiek meeneemt op reis door werelden waar energie, bewustzijn en menselijke emotie samenkomen. Naast schrijven en muziek maken, onderzoekt hij spirituele tradities, numerologie en de etherische dimensies van het leven.</p>
     </div>
   </div>
 </section>
 
 <!-- Instagram Feed -->
-<section class="instagram-feed">
-  <iframe src="//lightwidget.com/widgets/20b63b134bcd54d18f3288773e860b93.html" scrolling="no" allowtransparency="true" class="lightwidget-widget"></iframe>
+<section id="instagram">
+  <h2>Laatste Instagram Posts</h2>
+  <div class="instagram-feed">
+    <!-- LightWidget Instagram Widget -->
+    <iframe src="//lightwidget.com/widgets/20b63b134bcd54d18f3288773e860b93.html" scrolling="no" allowtransparency="true" class="lightwidget-widget"></iframe>
+  </div>
 </section>
 
-<!-- Modal -->
-<div class="modal" id="modal">
-  <div class="modal-close" id="modal-close">&times;</div>
-  <div class="modal-nav modal-prev" id="modal-prev">&#10094;</div>
-  <iframe id="modal-iframe" src="" allowtransparency="true"></iframe>
-  <div class="modal-nav modal-next" id="modal-next">&#10095;</div>
-</div>
-
-<footer>
-  &copy; 2026 Elias Reavan - Alle rechten voorbehouden
-</footer>
-
-<script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
-<script>
-  const modal = document.getElementById('modal');
-  const modalIframe = document.getElementById('modal-iframe');
-  const modalClose = document.getElementById('modal-close');
-  const modalPrev = document.getElementById('modal-prev');
-  const modalNext = document.getElementById('modal-next');
-
-  const posts = Array.from(document.querySelectorAll('.instagram-feed iframe')).map(f => f.src);
-  let currentIndex = 0;
-
-  function openModal(index) {
-    currentIndex = index;
-    modalIframe.src = posts[currentIndex];
-    modal.classList.add('active');
-  }
-
-  function closeModal() {
-    modal.classList.remove('active');
-    modalIframe.src = '';
-  }
-
-  function prevPost() {
-    currentIndex = (currentIndex - 1 + posts.length) % posts.length;
-    modalIframe.src = posts[currentIndex];
-  }
-
-  function nextPost() {
-    currentIndex = (currentIndex + 1) % posts.length;
-    modalIframe.src = posts[currentIndex];
-  }
-
-  document.querySelectorAll('.instagram-feed iframe').forEach((frame, i) => {
-    frame.addEventListener('click', () => openModal(i));
-  });
-  modalClose.addEventListener('click', closeModal);
-  modalPrev.addEventListener('click', prevPost);
-  modalNext.addEventListener('click', nextPost);
-
-  document.addEventListener('keydown', e => {
-    if (e.key === "Escape") closeModal();
-    if (e.key === "ArrowLeft") prevPost();
-    if (e.key === "ArrowRight") nextPost();
-  });
-</script>
+<!-- Mediaspeler -->
+<section id="media">
+  <h2>Luister / Bekijk</h2>
+  <div class="media-player">
+    <!-- Voorbeeld mediaspeler -->
+    <audio controls>
+      <source src="voorbeeld.mp3" type="audio/mpeg">
+      Je browser ondersteunt de audio-element niet.
+    </audio>
+    <br><br>
+    <video width="100%" controls>
+      <source src="voorbeeld.mp4" type="video/mp4">
+      Je browser ondersteunt de video-element niet.
+    </video>
+  </div>
+</section>
 
 </body>
 </html>
